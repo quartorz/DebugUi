@@ -1,0 +1,121 @@
+<html>
+  <head>
+    <title>DebugUi</title>
+    <script>
+      (() => {
+        'use strict';
+
+        document.addEventListener('DOMContentLoaded', () => {
+          const container = document.getElementById('container');
+
+          let source = new EventSource('/api/debugui-event');
+          source.addEventListener('start', event => {
+            // そのうちいろいろ送るようにしたいけど、まだ実装してないので接続されたらすぐ切断する
+            source.close();
+
+            // デバッグ用
+            window.data = event.data;
+            console.log(event.data);
+
+            let data = JSON.parse(event.data);
+            console.log(data);
+            if (!data.children) {
+              container.innerHTML = '';
+              return;
+            }
+
+            createUi(container, data.children);
+          });
+        });
+
+        function createUi(root, dataList) {
+          dataList.forEach(v => {
+            let elem = createElementRecursive(v);
+
+            // トップレベルの要素たちはinline blockにして横に並べる
+            elem.style.display = 'inline-block';
+            elem.style.position = 'relative';
+            delete elem.style.left;
+            delete elem.style.top;
+
+            container.appendChild(elem);
+          });
+        }
+
+        function createElementRecursive(data) {
+          if (!data.type) {
+            return null;
+          }
+
+          let elem = createElement(data);
+
+          if (data.events) {
+            data.events.forEach(ev => {
+              elem.addEventListener(ev, () => {
+                console.log(`event: id: ${data.id}, event: ${ev}`);
+                sendMessage(data.id, ev, '');
+              });
+            });
+          }
+
+          elem.style.width = data.width;
+          elem.style.height = data.height;
+          elem.style.position = 'absolute';
+          elem.style.left = `${data.x}px`;
+          elem.style.top = `${data.y}px`;
+
+          if (data.children) {
+            data.children.forEach(v => {
+              let child = createElementRecursive(v);
+              elem.appendChild(child);
+            });
+          }
+
+          return elem;
+        }
+
+        function createElement(data) {
+          switch (data.type) {
+            case 'panel':
+              {
+                let e = document.createElement('div');
+                e.style.display = 'inline-block';
+
+                let attr = data.attributes;
+                e.style.borderStyle = 'solid';
+                e.style.borderWidth = attr.borderWidth;
+                e.style.borderColor = attr.borderColor;
+                e.style.backgroundColor = attr.backgroundColor;
+
+                return e;
+              }
+            case 'button':
+              {
+                let e = document.createElement('button');
+                e.innerText = data.attributes.text;
+                return e;
+              }
+            default:
+              console.error('unknown element type: ' + data.type);
+              return document.createElement('div');
+          }
+        }
+
+        function sendMessage(id, eventType, data) {
+          let req = new XMLHttpRequest();
+          req.open('POST', '/api/debugui-event', true);
+          req.send(JSON.stringify({ id, eventType, data }) + '\n');
+        }
+      })();
+    </script>
+    <style>
+    div#container * {
+      margin: 0;
+      padding: 0;
+    }
+    </style>
+  </head>
+  <body>
+    <div id="container" style="width: 100%; height: 100%"></div>
+  </body>
+</html>

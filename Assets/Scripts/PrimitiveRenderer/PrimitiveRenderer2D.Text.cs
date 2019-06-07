@@ -19,8 +19,8 @@ public partial class PrimitiveRenderer2D
 		VerticalAlignment = VerticalAlignment.Top,
 		Overflow = Overflow.Nothing,
 		FontStyle = FontStyle.Normal,
-		FontSize = 20,
-		LineHeight = 0,
+		FontSize = 20f,
+		LineHeight = 30f,
 	};
 
 	public void DrawText(string text, TextFormat? format, Vector4 area)

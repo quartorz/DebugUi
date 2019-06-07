@@ -90,7 +90,7 @@ public class PrimitiveRenderer : IDisposable
 	}
 
 	/// <summary>
-	/// Sutherland-Hodgmanアルゴリズムをallocせずにするために作ったけど、stackallocとunsafeを使えばいらない気がする
+	/// Sutherland-Hodgmanアルゴリズムをallocせずにするために作ったけど、stackallocとunsafeを使えばいらない気がする。
 	/// </summary>
 	protected struct SmallList<T> where T : struct
 	{

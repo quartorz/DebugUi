@@ -95,6 +95,23 @@
                 e.innerText = data.attributes.text;
                 return e;
               }
+            case 'text':
+              {
+                let outer = document.createElement('div');
+                let inner = document.createElement('div');
+                inner.innerText = data.attributes.text;
+                outer.appendChild(inner);
+
+                let attr = data.attributes;
+                inner.style.fontSize = `${attr.fontSize}px`;
+                inner.style.textAlign = attr.align;
+                inner.style.verticalAlign = attr.verticalAlign;
+                inner.style.width = `${data.width}px`;
+                inner.style.height = `${data.height}px`;
+                inner.style.display = 'table-cell';
+
+                return outer;
+              }
             default:
               console.error('unknown element type: ' + data.type);
               return document.createElement('div');

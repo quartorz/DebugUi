@@ -58,8 +58,8 @@
             });
           }
 
-          elem.style.width = data.width;
-          elem.style.height = data.height;
+          elem.style.width = elem.style.width || data.width;
+          elem.style.height = elem.style.height || data.height;
           elem.style.position = 'absolute';
           elem.style.left = `${data.x}px`;
           elem.style.top = `${data.y}px`;
@@ -78,16 +78,25 @@
           switch (data.type) {
             case 'panel':
               {
-                let e = document.createElement('div');
-                e.style.display = 'inline-block';
+                let outer = document.createElement('div');
+                let border = document.createElement('div');
+                outer.style.display = 'inline-block';
 
                 let attr = data.attributes;
-                e.style.borderStyle = 'solid';
-                e.style.borderWidth = attr.borderWidth;
-                e.style.borderColor = attr.borderColor;
-                e.style.backgroundColor = attr.backgroundColor;
+                outer.style.width = data.width + attr.borderWidth;
+                outer.style.height = data.height + attr.borderWidth;
+                outer.style.backgroundColor = attr.backgroundColor;
+                // outer.style.transform = `translate(${attr.borderWidth}px, ${attr.borderWidth}px)`;
 
-                return e;
+                border.style.width = data.width;
+                border.style.height = data.height;
+                border.style.borderStyle = 'solid';
+                border.style.borderWidth = attr.borderWidth;
+                border.style.borderColor = attr.borderColor;
+                // border.style.transform = `translate(${attr.borderWidth}px, ${attr.borderWidth}px)`;
+                outer.appendChild(border);
+
+                return outer;
               }
             case 'button':
               {
@@ -104,6 +113,7 @@
 
                 let attr = data.attributes;
                 inner.style.fontSize = `${attr.fontSize}px`;
+                inner.style.color = attr.color;
                 inner.style.textAlign = attr.align;
                 inner.style.verticalAlign = attr.verticalAlign;
                 inner.style.width = `${data.width}px`;

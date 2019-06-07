@@ -22,7 +22,7 @@ public class DebugUiPanel : DebugUiColoredControl
 		BorderColor = new Color32(255, 255, 255, 255);
 		Width = width;
 		Height = height;
-		nextX = borderWidth / 2f;
+		nextX = borderWidth;
 		nextY = nextX;
 		currentLineHeight = 0f;
 	}
@@ -40,7 +40,7 @@ public class DebugUiPanel : DebugUiColoredControl
 
 	public void BreakLine()
 	{
-		nextX = BorderWidth / 2f;
+		nextX = BorderWidth;
 		nextY += currentLineHeight + LineSpacing;
 		currentLineHeight = 0f;
 	}

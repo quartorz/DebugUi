@@ -63,9 +63,11 @@ public class Test : MonoBehaviour
 		};
 		panel.AddChildAuto(button);
 
-		var text = new DebugUiText("テキスト", debugUiManager);
+		var text = new DebugUiText("テキスト1\nテキスト2\nテキスト3", debugUiManager);
 		text.Width = 300f;
 		text.Height = 300f;
+		text.TextColor = new Color32(128, 0, 255, 255);
+		text.Format.Alignment = PrimitiveRenderer2D.Alignment.Center;
 		text.Format.VerticalAlignment = PrimitiveRenderer2D.VerticalAlignment.Middle;
 		panel.AddChildAuto(text);
 

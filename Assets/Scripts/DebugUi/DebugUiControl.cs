@@ -238,8 +238,8 @@ public class DebugUiControl : IDisposable
 			control = control.nextSibling;
 		}
 
-		Width = maxX + BorderWidth * 2f;
-		Height = maxY + BorderWidth * 2f;
+		Width = maxX + BorderWidth;
+		Height = maxY + BorderWidth;
 	}
 
 	public virtual void ToJson(StreamWriter stream)

@@ -37,6 +37,7 @@ public class DebugUiText : DebugUiControl
 	protected override void Draw(PrimitiveRenderer2D renderer)
 	{
 		var area = new Vector4(GlobalX, GlobalY, GlobalX + Width, GlobalY + Height);
+		renderer.Color = TextColor;
 		renderer.DrawText(Text, Format, area);
 	}
 
@@ -61,6 +62,8 @@ public class DebugUiText : DebugUiControl
 		stream.Write(string.Format(",\"fontSize\":{0}", FontSize));
 		stream.Write(string.Format(",\"align\":\"{0}\"", (Format.Alignment == PrimitiveRenderer2D.Alignment.Left ? "left" : "center")));
 		stream.Write(string.Format(",\"verticalAlign\":\"{0}\"", (Format.VerticalAlignment == PrimitiveRenderer2D.VerticalAlignment.Top ? "top" : "middle")));
+		stream.Write(",\"color\":");
+		StreamUtil.WriteColorRGBA(stream, TextColor);
 		stream.Write("}}");
 	}
 }
